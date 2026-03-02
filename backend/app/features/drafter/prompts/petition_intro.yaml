@@ -1,0 +1,43 @@
+criteria_id: petition_intro
+system_prompt: |
+  You are an EB-1A petition writer. Follow the style of a formal attorney cover letter.
+  Write in clear, concise legal prose. Do not add headings or bullets in the output.
+  Return JSON only.
+human_prompt: |
+  Draft the petition introduction content using the following context.
+
+  Criteria this petition satisfies (mention only these):
+  {criteria_list}
+
+  Context:
+  {field_context}
+
+  Instructions:
+  1) Write an opening paragraph (3-5 sentences) that introduces the petition and summarizes the petitioner's personal background (education, employment history, and core professional identity) based on the provided Context. Prioritize personal-information evidence and avoid jumping directly into criteria-specific achievements in this opening paragraph.
+  2) Then write 2-3 qualification paragraphs: education/credentials, professional accomplishments, and recognition/impact—tied only to the criteria listed above. You must return at least 2 distinct non-empty strings in `qualification_paragraphs`.
+  3) Use the petitioner's name: {display_name}. Use the field: {user_field}. Use the occupation: {user_occupation}.
+  4) Refer only to the criteria in the list above; do not use generic phrases like "national or international acclaim" unless the evidence criteria explicitly support it.
+  {format_instructions}
+
+legal_authority_lines:
+  - LEGAL AUTHORITY
+  - Petitioner is seeking classification as an individual with an extraordinary ability in the sciences, arts, education, business, or athletics pursuant to Section 203(b)(1)(A) of the Act, 8 U.S.C. 1153(b)(1)(A). Section 203(b) of the Act states, in its pertinent part, that:
+  - (1) Priority workers. - Visas shall first be made available . . . to qualified immigrants who are aliens described in any of the following subparagraphs (A) through (C):
+  - (A) Alien with extraordinary ability. - An alien is described in this subparagraph if-
+  - (i) the alien has extraordinary ability in the sciences, arts, education, business, or athletics which has been demonstrated by sustained national or international acclaim and whose achievements have been recognized in the field through extensive documentation,
+  - (ii) the alien seeks to enter the United States to continue work in the area of extraordinary ability, and
+  - (iii) the alien's entry into the United States will substantially benefit prospectively the United States.
+  - An alien with extraordinary ability is defined in 8 C.F.R. 204.5(h)(2) as an alien that possesses "a level of expertise indicating that the individual is one of that small percentage who has risen to the very top of the field of endeavor." 8 C.F.R. 204.5(h)(3) further states that an alien can establish sustained national or international acclaim through evidence of a one-time achievement of a major, internationally recognized award (i.e., Pulitzer, Oscar, Olympic Medal). Absent receipt of such award, the petitioner must demonstrate his or her sustained acclaim and the recognition through the submission of qualifying evidence under at least three of the ten categories listed in 8 C.F.R. 204.5(h)(3)(i)-(x). The ten categories of evidence include:
+  - Documentation of the alien's receipt of lesser nationally or internationally recognized prizes or awards for excellence in the field of endeavor.
+  - Documentation of the alien's membership in associations in the field for which classification is sought, which require outstanding achievements of their members, as judged by recognized national or international experts in their disciplines or fields.
+  - Published material about the alien in professional or major trade publications or other major media, relating to the alien's work in the field for which classification is sought. Such evidence shall include the title, date, and author of the material, and any necessary translation.
+  - Evidence of the alien's participation, either individually or on a panel, as a judge of the work of others in the same or an allied field or specification for which classification is sought.
+  - Evidence of the alien's original scientific, scholarly, artistic, athletic, or business-related contributions of major significance in the field.
+  - Evidence of the alien's authorship of scholarly articles in the field, in professional or major trade publication or other major media.
+  - Evidence of the display of the alien's work in the field at artistic exhibits or showcases.
+  - Evidence that the alien has performed in a leading or critical role for organizations or establishments that have a distinguished reputation.
+  - Evidence that the alien has commanded a high salary or other significantly high remuneration for services, in relation to others in the field; or
+  - Evidence of commercial successes in the performing arts, as shown by box office receipts or record, cassette, compact disk, or video sales.
+  - In addition to this, according to 8 C.F.R. 204.5(h)(4), if the above standards do not readily apply to the petitioner's occupation, the petitioner may submit comparable evidence to establish the petitioner's eligibility.
+legal_authority_tail_template: |
+  Given the evidence submitted under {criteria_list}, {display_name} satisfies the regulatory requirements for classification as an alien of extraordinary ability under 8 C.F.R. 204.5(h). The approval of {display_name}'s immigration petition will substantially benefit the United States and {user_field} in the United States.

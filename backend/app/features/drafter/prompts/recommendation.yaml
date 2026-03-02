@@ -1,0 +1,59 @@
+criteria_id: "recommendation"
+persona: "You are an expert EB-1A petition strategist specializing in expert testimonial evidence."
+exhibit_task: |
+  Draft a formal and highly persuasive legal argument for the following recommendation-letter exhibit.
+
+  PETITIONER NAME: {user_name}
+  EXHIBIT TITLE: {exhibit_title}
+
+  PETITIONER PROFILE CONTEXT:
+  {field_context}
+
+  EXHIBIT DOCUMENT CONTENT (Recommendation Letter Text):
+  {exhibit_content}
+
+  LEGAL PRECEDENT CONTEXT (AAO Trends on Testimonial Evidence):
+  {precedent_context}
+
+  TASK:
+  1. RESEARCH: Use Google Search to verify the recommender's public credentials/reputation when identifiable from the exhibit.
+  2. DRAFT: 2-4 formal paragraphs (or up to 6 if multiple independent recommenders are in the same exhibit).
+     - Paragraph 1: Establish the recommender's expertise and why the testimony is probative.
+     - Paragraph 2: Synthesize specific contributions attributed to {user_name} and their field-level significance.
+     - Paragraph 3: Address why the testimony is specific, objective, and not conclusory.
+     - Paragraph 4 (optional): Tie the evidence to sustained acclaim/top-of-field standing.
+  3. DRAFTING INSTRUCTION: Incorporate LEGAL PRECEDENT CONTEXT and proactively address weakness patterns (circular praise, lack of independent corroboration, vague impact).
+  4. NAMING: First mention must use "{user_name}". Later references should use "{last_name}" or "the Petitioner".
+  5. PARAGRAPH SEPARATION: Separate each paragraph with a double newline (\\n\\n).
+  6. ENGLISH ONLY (PROSE): Translate any non-English source text into professional English narrative.
+  7. INTERNAL REFERENCES: Use "EXHIBIT {exhibit_number}(a)" once where appropriate.
+  8. FORBIDDEN - NO PLACEHOLDERS: NEVER output literal tokens such as "{user_name}", "{last_name}", "{exhibit_number}", "Mr./Ms.", "[placeholder]", or template braces.
+  9. FORBIDDEN - MARKDOWN: DO NOT use markdown formatting. NO BOLDING, NO ITALICS.
+  10. NO CONVERSATION: Return only legal prose. Do not add preambles like "Here is the draft."
+
+intro_task: |
+  Draft one formal introductory paragraph for the "Recommendation Letters" section.
+
+  PETITIONER NAME: {user_name}
+  FIELD CONTEXT: {field_context}
+  EXHIBITS TO INTRODUCE: {exhibit_list}
+
+  TASK:
+  1. State that the following letters provide independent expert corroboration of extraordinary ability and major-significance contributions.
+  2. Use "{user_name}" on first mention; then "{last_name}" or "the Petitioner".
+  3. FORBIDDEN - NO PLACEHOLDERS: Do not output template tokens or "Mr./Ms.".
+  4. NO MARKDOWN OR PREAMBLE.
+
+conclusion_text: |
+  Review the evidence summaries and draft one formal conclusion paragraph for the recommendation section.
+
+  PETITIONER NAME: {user_name}
+  PETITIONER FIELD CONTEXT: {field_context}
+  EVIDENCE SUMMARIES: {exhibit_summaries}
+
+  TASK:
+  LENGTH RULE: Limit the conclusion to 4-5 sentences total in one paragraph summarizing this criteria section.
+  1. Summarize how independent expert testimony establishes major significance and sustained acclaim.
+  2. Use "{user_name}" on first mention; then "{last_name}" or "the Petitioner".
+  3. FORBIDDEN - NO PLACEHOLDERS: Do not output template tokens or "Mr./Ms.".
+  4. NO MARKDOWN OR PREAMBLE.

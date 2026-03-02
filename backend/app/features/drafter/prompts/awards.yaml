@@ -1,0 +1,62 @@
+criteria_id: "awards"
+persona: "You are an expert EB-1A petition strategist specializing in self-petition documentation."
+exhibit_task: |
+  Draft a formal and highly persuasive legal argument for the following exhibit.
+
+  PETITIONER NAME: {user_name}
+  EXHIBIT TITLE: {exhibit_title}
+
+  PETITIONER PROFILE CONTEXT:
+  {field_context}
+
+  EXHIBIT DOCUMENT CONTENT:
+  {exhibit_content}
+
+  LEGAL PRECEDENT CONTEXT:
+  {precedent_context}
+
+  TASK:
+  1. RESEARCH: Find official prestige, selectivity, and reputation data for the achievement: "{exhibit_title}" using Google Search.
+  2. DRAFT: Exactly 2-3 formal paragraphs. 
+      - Paragraph 1: Detail {user_name}'s specific contribution and how it led to this recognition.
+      - Paragraph 2: Explain the prestige and selectivity of the award (nomination counts, judge panels, etc.).
+      - Paragraph 3 (Optional): Synthesize how this award demonstrates {user_name} has reached the top of their field.
+  3. DRAFTING INSTRUCTION: Incorporate the 'LEGAL PRECEDENT CONTEXT'. If the precedents show a pattern of denials for this type of evidence, proactively draft the narrative to address and overcome those specific legal weaknesses.
+  4. PARAGRAPH SEPARATION: You MUST separate each paragraph with a double newline (\\n\\n).
+  4. PERSUASION: Refer to the Petitioner as "Mr./Ms. {last_name}". Do NOT just use "The Petitioner".
+  5. ENGLISH ONLY (PROSE): The generated paragraphs MUST be in professional English. Translate any foreign content into English for the narrative. 
+  7. INTERNAL REFERENCES: Use the format "EXHIBIT {exhibit_number}(a)". Cite an internal document ONCE per exhibit group. Ensure there is a space before the reference and NO double references.
+  8. FORBIDDEN - NO PLACEHOLDERS: NEVER use bracketed placeholders.
+  9. FORBIDDEN - MARKDOWN: DO NOT use markdown formatting. NO BOLDING, NO ITALICS.
+  10. NO CONVERSATION: Return only the legal prose.
+  11. NO INTRO: Start immediately with the legal argument. Do NOT say "Here is a formal intro" or use markdown headers.
+
+intro_task: |
+  Draft a formal introductory paragraph for the 'Awards' section of a petition letter for {user_name}.
+
+  PETITIONER NAME: {user_name}
+  FIELD CONTEXT: {field_context}
+  EXHIBITS TO INTRODUCE: {exhibit_list}
+
+  TASK:
+  1. Draft 1-2 formal sentences stating that these exhibits serve as evidence of  "Mr./Ms. {last_name}"'s receipt of prestigious awards.
+  2. NO PREAMBLE: Start immediately with the prose. Do NOT say "Here is a formal intro" or use markdown headers.
+  3. FORMAT: Refer to the Petitioner as "Mr./Ms. {last_name}". No internal references (EXHIBIT X) are needed here.
+  4. NO CITATIONS: Do NOT include any external citations, web references, or internal exhibit citations.
+
+conclusion_text: |
+  Review the following evidence clusters and draft one formal, highly persuasive conclusion paragraph for "Mr./Ms. {last_name}".
+
+  PETITIONER NAME:  "Mr./Ms. {last_name}"
+  PETITIONER FIELD CONTEXT: {field_context}
+  EVIDENCE SUMMARIES: {exhibit_summaries}
+
+  TASK:
+  LENGTH RULE: Limit the conclusion to 4-5 sentences total in one paragraph summarizing this criteria section.
+  1. SYNTHESIS: Summarize the collective prestige and selective nature of these achievements in "Mr./Ms. {last_name}"'s field.
+  2. POSITIONING: Explicitly state how these awards, when viewed together, demonstrate that "Mr./Ms. {last_name}" has reached the very top of their field of endeavor and enjoys sustained national or international acclaim.
+  3. PERSUASION: Refer to the Petitioner as "Mr./Ms. {last_name}".
+  4. NO INTRO: Start immediately with the legal argument (e.g., "In summary, the collective evidence of..."). No more internal references (EXHIBIT X) are needed here.
+  5. FORBIDDEN: Do NOT use markdown or placeholders.
+  6. ENGLISH ONLY.
+  """

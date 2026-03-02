@@ -1,0 +1,62 @@
+criteria_id: "judging"
+persona: "You are an expert EB-1A petition strategist specializing in Judging the work of others."
+exhibit_task: |
+  Draft a formal and highly persuasive legal argument for the following exhibit regarding Judging the Work of Others.
+
+  PETITIONER NAME: {user_name}
+  EXHIBIT TITLE: {exhibit_title}
+
+  PETITIONER PROFILE CONTEXT:
+  {field_context}
+
+  EXHIBIT DOCUMENT CONTENT:
+  {exhibit_content}
+
+  LEGAL PRECEDENT CONTEXT:
+  {precedent_context}
+
+  TASK:
+  1. RESEARCH: Find official information about the event, journal, or competition: "{exhibit_title}" and the criteria for selecting judges or reviewers using Google Search.
+  2. DRAFT: Exactly 2-3 formal paragraphs. 
+      - Paragraph 1: Detail {user_name}'s specific judging role (e.g., peer reviewer, competition judge) and the nature of the work they evaluated.
+      - Paragraph 2: Explain the high standards and selective process for being invited to judge, emphasizing that this role is reserved for recognized experts in the field.
+      - Paragraph 3 (Optional): Synthesize how this role demonstrates {user_name} is recognized as an authority whose expertise is sought by peers.
+  3. DRAFTING INSTRUCTION: Incorporate the 'LEGAL PRECEDENT CONTEXT'. Address the requirement that the judging must be in the same or an allied field and that it reflects the petitioner's expertise.
+  4. PARAGRAPH SEPARATION: You MUST separate each paragraph with a double newline (\\n\\n).
+  5. PERSUASION: Refer to the Petitioner as "Mr./Ms. {last_name}". Do NOT just use "The Petitioner".
+  6. ENGLISH ONLY (PROSE): The generated paragraphs MUST be in professional English. Translate any foreign content into English for the narrative. 
+  7. INTERNAL REFERENCES: Use the format "EXHIBIT {exhibit_number}(a)". Cite an internal document ONCE per exhibit group. Ensure there is a space before the reference and NO double references.
+  8. FORBIDDEN - NO PLACEHOLDERS: NEVER use bracketed placeholders.
+  9. FORBIDDEN - MARKDOWN: DO NOT use markdown formatting. NO BOLDING, NO ITALICS.
+  10. NO CONVERSATION: Return only the legal prose.
+  11. NO INTRO: Start immediately with the legal argument. Do NOT say "Here is a formal intro" or use markdown headers.
+
+intro_task: |
+  Draft a formal introductory paragraph for the 'Judging' section of a petition letter for {user_name}.
+
+  PETITIONER NAME: {user_name}
+  FIELD CONTEXT: {field_context}
+  EXHIBITS TO INTRODUCE: {exhibit_list}
+
+  TASK:
+  1. Draft 1-2 formal sentences stating that these exhibits serve as evidence of "Mr./Ms. {last_name}"'s participation as a judge of the work of others in the field.
+  2. NO PREAMBLE: Start immediately with the prose.
+  3. FORMAT: Refer to the Petitioner as "Mr./Ms. {last_name}". No internal references (EXHIBIT X) are needed here.
+  4. NO CITATIONS: Do NOT include any external citations, web references, or internal exhibit citations. No internal references (EXHIBIT X) are needed here.
+  4. NO CITATIONS: Do NOT include any external citations or web references.
+
+conclusion_text: |
+  Review the following evidence clusters for Judging and draft one formal, highly persuasive conclusion paragraph for "Mr./Ms. {last_name}".
+
+  PETITIONER NAME: "Mr./Ms. {last_name}"
+  PETITIONER FIELD CONTEXT: {field_context}
+  EVIDENCE SUMMARIES: {exhibit_summaries}
+
+  TASK:
+  LENGTH RULE: Limit the conclusion to 4-5 sentences total in one paragraph summarizing this criteria section.
+  1. SYNTHESIS: Summarize how these judging and peer-review roles confirm "Mr./Ms. {last_name}"'s standing as an authority in the field.
+  2. POSITIONING: Explicitly state how these roles demonstrate that "Mr./Ms. {last_name}" is recognized by peers as having the requisite expertise to evaluate the work of others at the highest levels.
+  3. PERSUASION: Refer to the Petitioner as "Mr./Ms. {last_name}".
+  4. NO INTRO: Start immediately with the legal argument (e.g., "In summary, the collective evidence of..."). No more internal references (EXHIBIT X) are needed here.
+  5. FORBIDDEN: Do NOT use markdown or placeholders.
+  6. ENGLISH ONLY.

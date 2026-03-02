@@ -1,0 +1,61 @@
+criteria_id: "commercial"
+persona: "You are an expert EB-1A petition strategist specializing in Commercial Success in the Performing Arts."
+exhibit_task: |
+  Draft a formal and highly persuasive legal argument for the following exhibit regarding Commercial Success.
+
+  PETITIONER NAME: {user_name}
+  EXHIBIT TITLE: {exhibit_title}
+
+  PETITIONER PROFILE CONTEXT:
+  {field_context}
+
+  EXHIBIT DOCUMENT CONTENT:
+  {exhibit_content}
+
+  LEGAL PRECEDENT CONTEXT:
+  {precedent_context}
+
+  TASK:
+  1. RESEARCH: Find official data on the commercial success (box office, sales, etc.) of the project: "{exhibit_title}" using Google Search. Focus on proving "commercial successes in the performing arts."
+  2. DRAFT: Exactly 2-3 formal paragraphs. 
+      - Paragraph 1: Detail the commercial success achieved (e.g., specific sales figures, box office receipts, record sales) and {user_name}'s role in that success.
+      - Paragraph 2: Explain how this success compares to others in the field, citing specific data to prove its significance and its "commercial" nature.
+      - Paragraph 3 (Optional): Synthesize how this commercial success demonstrates {user_name}'s broad appeal and significant impact in the performing arts.
+  3. DRAFTING INSTRUCTION: Incorporate the 'LEGAL PRECEDENT CONTEXT'. Proactively address the requirement that the success must be "commercial" and related to the "performing arts," providing concrete evidence of receipts or sales.
+  4. PARAGRAPH SEPARATION: You MUST separate each paragraph with a double newline (\\n\\n).
+  5. PERSUASION: Refer to the Petitioner as "Mr./Ms. {last_name}". Do NOT just use "The Petitioner".
+  6. ENGLISH ONLY (PROSE): The generated paragraphs MUST be in professional English. Translate any foreign content into English for the narrative. 
+  7. INTERNAL REFERENCES: Use the format "EXHIBIT {exhibit_number}(a)". Cite an internal document ONCE per exhibit group. Ensure there is a space before the reference and NO double references.
+  8. FORBIDDEN - NO PLACEHOLDERS: NEVER use bracketed placeholders.
+  9. FORBIDDEN - MARKDOWN: DO NOT use markdown formatting. NO BOLDING, NO ITALICS.
+  10. NO CONVERSATION: Return only the legal prose.
+  11. NO INTRO: Start immediately with the legal argument. Do NOT say "Here is a formal intro" or use markdown headers.
+
+intro_task: |
+  Draft a formal introductory paragraph for the 'Commercial Success' section of a petition letter for {user_name}.
+
+  PETITIONER NAME: {user_name}
+  FIELD CONTEXT: {field_context}
+  EXHIBITS TO INTRODUCE: {exhibit_list}
+
+  TASK:
+  1. Draft 1-2 formal sentences stating that these exhibits serve as evidence of "Mr./Ms. {last_name}"'s commercial successes in the performing arts.
+  2. NO PREAMBLE: Start immediately with the prose.
+  3. FORMAT: Refer to the Petitioner as "Mr./Ms. {last_name}". No internal references (EXHIBIT X) are needed here.
+  4. NO CITATIONS: Do NOT include any external citations, web references, or internal exhibit citations.
+
+conclusion_text: |
+  Review the following evidence clusters for Commercial Success and draft one formal, highly persuasive conclusion paragraph for "Mr./Ms. {last_name}".
+
+  PETITIONER NAME: "Mr./Ms. {last_name}"
+  PETITIONER FIELD CONTEXT: {field_context}
+  EVIDENCE SUMMARIES: {exhibit_summaries}
+
+  TASK:
+  LENGTH RULE: Limit the conclusion to 4-5 sentences total in one paragraph summarizing this criteria section.
+  1. SYNTHESIS: Summarize how these commercial achievements in the performing arts demonstrate "Mr./Ms. {last_name}"'s exceptional success and broad recognition.
+  2. POSITIONING: Explicitly state how this commercial success proves that "Mr./Ms. {last_name}" is an artist of extraordinary ability whose work has achieved significant market success.
+  3. PERSUASION: Refer to the Petitioner as "Mr./Ms. {last_name}".
+  4. NO INTRO: Start immediately with the legal argument (e.g., "In summary, the collective evidence of..."). No more internal references (EXHIBIT X) are needed here.
+  5. FORBIDDEN: Do NOT use markdown or placeholders.
+  6. ENGLISH ONLY.

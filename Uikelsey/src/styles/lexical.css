@@ -1,0 +1,60 @@
+/* Lexical Editor Styles */
+
+/* Basic editor content styles */
+.ContentEditable__root {
+  outline: none;
+}
+
+/* Placeholder styles */
+.ContentEditable__placeholder {
+  color: #9ca3af;
+  pointer-events: none;
+}
+
+/* Typography - these are handled by Tailwind classes in theme config */
+/* But we can add additional global editor styles here if needed */
+
+/* Selection */
+.ContentEditable__root ::selection {
+  background-color: #dbeafe;
+}
+
+/* Focus */
+.ContentEditable__root:focus {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+/* Additional Lexical-specific styles */
+.editor-container {
+  position: relative;
+}
+
+.editor-text-bold {
+  font-weight: bold;
+}
+
+.editor-text-italic {
+  font-style: italic;
+}
+
+.editor-text-underline {
+  text-decoration: underline;
+}
+
+.editor-text-strikethrough {
+  text-decoration: line-through;
+}
+
+.editor-link {
+  color: #434E87;
+  text-decoration: underline;
+}
+
+.editor-code {
+  background-color: #f3f4f6;
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9em;
+}

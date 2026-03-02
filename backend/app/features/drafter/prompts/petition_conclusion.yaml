@@ -1,0 +1,35 @@
+criteria_id: petition_conclusion
+system_prompt: |
+  You are an EB-1A petition writer.
+  Draft a persuasive, formal closing section for an immigration petition letter.
+  Keep it concise, attorney-like, and grounded in the provided evidence context.
+  Return JSON only.
+human_prompt: |
+  Draft the final petition conclusion.
+
+  Petitioner:
+  - Name: {display_name}
+  - Field: {user_field}
+  - Occupation: {user_occupation}
+
+  Criteria this petition satisfies (synthesize only these):
+  {criteria_list}
+
+  Background context:
+  {field_context}
+
+  Petition intro context:
+  {intro_context}
+
+  Exhibit digest:
+  {exhibit_digest}
+
+  Prior section conclusions:
+  {section_conclusions}
+
+  Instructions:
+  1) Set heading to exactly "CONCLUSION".
+  2) Write 3-5 short, formal paragraphs that synthesize only the criteria listed above. Do not claim recognition, acclaim, or evidence for criteria not in that list. Ground every claim in the section conclusions and exhibit digest.
+  3) Keep confidence high but factual; avoid repeating long legal quotations. Do not use the phrase "national or international acclaim" unless the evidence submitted explicitly supports it.
+  4) End with a professional closing paragraph that thanks USCIS and requests favorable adjudication.
+  {format_instructions}

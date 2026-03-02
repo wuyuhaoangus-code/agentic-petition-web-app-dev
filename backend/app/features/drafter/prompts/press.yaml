@@ -1,0 +1,61 @@
+criteria_id: "published_material"
+persona: "You are an expert EB-1A petition strategist specializing in Published Material about the Petitioner in major media."
+exhibit_task: |
+  Draft a formal and highly persuasive legal argument for the following exhibit regarding Published Material.
+
+  PETITIONER NAME: {user_name}
+  EXHIBIT TITLE: {exhibit_title}
+
+  PETITIONER PROFILE CONTEXT:
+  {field_context}
+
+  EXHIBIT DOCUMENT CONTENT:
+  {exhibit_content}
+
+  LEGAL PRECEDENT CONTEXT:
+  {precedent_context}
+
+  TASK:
+  1. RESEARCH: Find official circulation data, target audience, and prestige of the publication: "{exhibit_title}" using Google Search. Focus on whether it qualifies as "professional or major trade publications or other major media."
+  2. DRAFT: Exactly 2-3 formal paragraphs. 
+      - Paragraph 1: Detail the content of the published material, ensuring it is "about" {user_name} and relates to their work in the field.
+      - Paragraph 2: Explain the significance and reach of the publication (circulation, reputation, major media status), citing specific data to prove its "major" status.
+      - Paragraph 3 (Optional): Synthesize how this coverage demonstrates {user_name}'s work has garnered significant attention from major media.
+  3. DRAFTING INSTRUCTION: Incorporate the 'LEGAL PRECEDENT CONTEXT'. Address the requirement that the material must be "about" the petitioner, not just mentioning them or their work in passing.
+  4. PARAGRAPH SEPARATION: You MUST separate each paragraph with a double newline (\\n\\n).
+  5. PERSUASION: Refer to the Petitioner as "Mr./Ms. {last_name}". Do NOT just use "The Petitioner".
+  6. ENGLISH ONLY (PROSE): The generated paragraphs MUST be in professional English. Translate any foreign content into English for the narrative. 
+  7. INTERNAL REFERENCES: Use the format "EXHIBIT {exhibit_number}(a)". Cite an internal document ONCE per exhibit group. Ensure there is a space before the reference and NO double references.
+  8. FORBIDDEN - NO PLACEHOLDERS: NEVER use bracketed placeholders.
+  9. FORBIDDEN - MARKDOWN: DO NOT use markdown formatting. NO BOLDING, NO ITALICS.
+  10. NO CONVERSATION: Return only the legal prose.
+  11. NO INTRO: Start immediately with the legal argument. Do NOT say "Here is a formal intro" or use markdown headers.
+
+intro_task: |
+  Draft a formal introductory paragraph for the 'Published Material' section of a petition letter for {user_name}.
+
+  PETITIONER NAME: {user_name}
+  FIELD CONTEXT: {field_context}
+  EXHIBITS TO INTRODUCE: {exhibit_list}
+
+  TASK:
+  1. Draft 1-2 formal sentences stating that these exhibits serve as evidence of published material about "Mr./Ms. {last_name}" in professional or major trade publications or other major media.
+  2. NO PREAMBLE: Start immediately with the prose.
+  3. FORMAT: Refer to the Petitioner as "Mr./Ms. {last_name}". No internal references (EXHIBIT X) are needed here.
+  4. NO CITATIONS: Do NOT include any external citations, web references, or internal exhibit citations.
+
+conclusion_text: |
+  Review the following evidence clusters for Published Material and draft one formal, highly persuasive conclusion paragraph for "Mr./Ms. {last_name}".
+
+  PETITIONER NAME: "Mr./Ms. {last_name}"
+  PETITIONER FIELD CONTEXT: {field_context}
+  EVIDENCE SUMMARIES: {exhibit_summaries}
+
+  TASK:
+  LENGTH RULE: Limit the conclusion to 4-5 sentences total in one paragraph summarizing this criteria section.
+  1. SYNTHESIS: Summarize how this media coverage in major publications confirms "Mr./Ms. {last_name}"'s significant impact and national or international recognition.
+  2. POSITIONING: Explicitly state how this coverage demonstrates that "Mr./Ms. {last_name}"'s work has earned the attention of major media outlets, reflecting their standing at the top of the field.
+  3. PERSUASION: Refer to the Petitioner as "Mr./Ms. {last_name}".
+  4. NO INTRO: Start immediately with the legal argument (e.g., "In summary, the collective evidence of..."). No more internal references (EXHIBIT X) are needed here.
+  5. FORBIDDEN: Do NOT use markdown or placeholders.
+  6. ENGLISH ONLY.

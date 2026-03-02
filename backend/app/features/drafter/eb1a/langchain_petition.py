@@ -45,11 +45,12 @@ async def draft_petition_intro(
     db: Session,
     user_id,
     user_name: str,
+    run_id=None,
     llm,
     profile,
     prompt_registry,
 ) -> str:
-    logger.info(f"Drafting petition intro for user {user_id}")
+    logger.info(f"Drafting petition intro for user {user_id}, run {run_id}")
 
     config = prompt_registry.get("petition_intro")
     if not config:
@@ -65,33 +66,76 @@ async def draft_petition_intro(
     first_name = profile.first_name if profile and profile.first_name else ""
     display_name = user_name if user_name else "The Petitioner"
 
-    personal_categories = [
-        "basicInfo",
-        "Personal Information",
-        "resumeCV",
-        "graduation_certificates",
-        "employment_verification",
-        "other_personalinfo",
-    ]
     repo = DocumentRepository(db)
-    personal_files = repo.files_query().filter(
-        UserFile.user_id == user_id,
-        or_(
-            UserFile.category.in_(personal_categories),
-            _criteria_contains(UserFile.criteria, "personal_info"),
+    exhibit_repo = ExhibitRepository(db)
+    personal_files = []
+    personal_content = []
+
+    run_has_personal_exhibits = False
+    run_personal_item_labels = []
+    if run_id:
+        run_personal_exhibits = exhibit_repo.get_by_run_and_criteria(user_id, run_id, "personal_info")
+        if run_personal_exhibits:
+            run_has_personal_exhibits = True
+            seen_file_ids = set()
+            seen_content_ids = set()
+            for exhibit in run_personal_exhibits:
+                if exhibit.title:
+                    run_personal_item_labels.append(exhibit.title.strip())
+                items = exhibit_repo.get_items_for_exhibit_ordered(exhibit.id)
+                for item in items:
+                    if item.file_id and item.file_id not in seen_file_ids:
+                        file_rec = repo.get_file(user_id, item.file_id)
+                        if file_rec:
+                            personal_files.append(file_rec)
+                            seen_file_ids.add(item.file_id)
+                            if file_rec.file_name:
+                                run_personal_item_labels.append(file_rec.file_name.strip())
+                    if item.content_id and item.content_id not in seen_content_ids:
+                        content_rec = repo.get_evidence_by_id(item.content_id)
+                        if content_rec and content_rec.user_id == user_id:
+                            personal_content.append(content_rec)
+                            seen_content_ids.add(item.content_id)
+                            if content_rec.title:
+                                run_personal_item_labels.append(content_rec.title.strip())
+            logger.info(
+                "Run-scoped personal context loaded from exhibit items: files=%s content=%s",
+                len(personal_files),
+                len(personal_content),
+            )
+
+    if not personal_files and not personal_content and not run_has_personal_exhibits:
+        personal_categories = [
+            "basicInfo",
+            "Personal Information",
+            "resumeCV",
+            "graduation_certificates",
+            "employment_verification",
+            "other_personalinfo",
+        ]
+        personal_files = repo.files_query().filter(
+            UserFile.user_id == user_id,
+            or_(
+                UserFile.category.in_(personal_categories),
+                _criteria_contains(UserFile.criteria, "personal_info"),
+            )
+        ).all()
+        personal_content = repo.evidence_query().filter(
+            UserEvidenceContent.user_id == user_id,
+            or_(
+                UserEvidenceContent.category.in_(personal_categories),
+                _criteria_contains(UserEvidenceContent.criteria, "personal_info"),
+            )
+        ).all()
+        logger.info(
+            "Fallback user-scoped personal context loaded: files=%s content=%s",
+            len(personal_files),
+            len(personal_content),
         )
-    ).all()
-    personal_content = repo.evidence_query().filter(
-        UserEvidenceContent.user_id == user_id,
-        or_(
-            UserEvidenceContent.category.in_(personal_categories),
-            _criteria_contains(UserEvidenceContent.criteria, "personal_info"),
-        )
-    ).all()
 
     logger.info(f"Found {len(personal_files)} personal files and {len(personal_content)} personal content entries")
 
-    if not personal_content and not personal_files:
+    if not personal_content and not personal_files and not run_has_personal_exhibits:
         logger.info("No personal info found with category tags, trying fallback search")
         personal_content = repo.evidence_query().filter(
             UserEvidenceContent.user_id == user_id,
@@ -136,18 +180,66 @@ async def draft_petition_intro(
             personal_info_context.append(f"[{file.file_name}]: Personal document uploaded")
 
     personal_info_text = "\n\n".join(personal_info_context) if personal_info_context else field_context
+    if run_has_personal_exhibits and not personal_info_context:
+        # Keep intro deterministic to this run even when OCR/text is sparse.
+        unique_labels = []
+        seen_labels = set()
+        for label in run_personal_item_labels:
+            clean_label = (label or "").strip()
+            if clean_label and clean_label.lower() not in seen_labels:
+                unique_labels.append(clean_label)
+                seen_labels.add(clean_label.lower())
+        if unique_labels:
+            personal_info_text = "Run-scoped personal information references:\n" + "\n".join(
+                f"- {label}" for label in unique_labels[:20]
+            )
+        logger.info(
+            "Using run-scoped personal-info label fallback for intro context (labels=%s)",
+            len(unique_labels),
+        )
     logger.info(f"Built personal info context with {len(personal_info_context)} items, total length: {len(personal_info_text)}")
 
     if not personal_info_text or len(personal_info_text.strip()) < 10:
         logger.warning(f"No substantial personal information found for user {user_id}. Using minimal context.")
         personal_info_text = f"EB-1A Petitioner: {display_name}, Field: {user_field}, Occupation: {user_occupation}"
 
-    all_criteria_ids = extract_user_criteria(db, user_id)
+    all_criteria_ids = extract_user_criteria(db, user_id, run_id=run_id)
     criteria_ids = [c for c in all_criteria_ids if c not in ["recommendation", "future_work", "personal_info"]]
     criteria_list = ", ".join(
         CRITERIA_INFO.get(normalize_criteria_id(c), {}).get("header", c.replace("_", " ").title())
         for c in criteria_ids
     ) if criteria_ids else "the criteria set forth below"
+
+    criteria_evidence_context = "No run-scoped criteria evidence details available."
+    target_run_id = run_id
+    if not target_run_id:
+        latest_exhibit = exhibit_repo.get_latest_for_user(user_id)
+        target_run_id = latest_exhibit.run_id if latest_exhibit and latest_exhibit.run_id else None
+    if target_run_id:
+        run_exhibits = exhibit_repo.get_by_run(user_id, target_run_id)
+        evidence_lines = []
+        for ex in run_exhibits:
+            if (ex.criteria_id or "").lower() in ["personal_info", "future_work"]:
+                continue
+            criteria_label = CRITERIA_INFO.get(
+                normalize_criteria_id(ex.criteria_id or ""),
+                {},
+            ).get("header", (ex.criteria_id or "criteria").replace("_", " ").title())
+            title = (ex.title or "").strip()
+            summary = (ex.summary or "").strip()
+            draft_excerpt = (ex.draft_content or "").strip()
+            if len(draft_excerpt) > 500:
+                draft_excerpt = draft_excerpt[:500].rsplit(" ", 1)[0] + "..."
+            line_parts = [f"[{criteria_label}]"]
+            if title:
+                line_parts.append(f"Title: {title}")
+            if summary:
+                line_parts.append(f"Summary: {summary}")
+            if draft_excerpt:
+                line_parts.append(f"Draft: {draft_excerpt}")
+            evidence_lines.append(" | ".join(line_parts))
+        if evidence_lines:
+            criteria_evidence_context = "\n".join(evidence_lines[:30])
 
     parser = PydanticOutputParser(pydantic_object=PetitionIntro)
     prompt = ChatPromptTemplate.from_messages([
@@ -156,9 +248,12 @@ async def draft_petition_intro(
     ])
 
     logger.info(f"Invoking LLM for petition intro (user: {display_name}, criteria: {criteria_list})")
+    logger.info("PETITION_INTRO criteria_list=%s", criteria_list)
+    logger.info("PETITION_INTRO field_context=%s", personal_info_text)
     chain = prompt | llm
     response = await chain.ainvoke({
         "field_context": personal_info_text,
+        "criteria_evidence_context": criteria_evidence_context,
         "display_name": display_name,
         "user_field": user_field,
         "user_occupation": user_occupation,
@@ -284,9 +379,13 @@ async def draft_petition_intro(
         sections.append(f"INTRODUCTION OF {possessive_name.upper()} QUALIFICATION")
         sections.extend(parsed.qualification_paragraphs)
 
-    exhibit_repo = ExhibitRepository(db)
-    exhibit_1 = exhibit_repo.get_latest_by_criteria(user_id, "personal_info")
-    if exhibit_1:
+    run_has_personal_info = False
+    if run_id:
+        run_has_personal_info = bool(exhibit_repo.get_by_run_and_criteria(user_id, run_id, "personal_info"))
+    else:
+        exhibit_1 = exhibit_repo.get_latest_by_criteria(user_id, "personal_info")
+        run_has_personal_info = exhibit_1 is not None
+    if run_has_personal_info:
         sections.append("<<INSERT_EXHIBIT_1_FROM_DB>>")
 
     sections.append("LEGAL AUTHORITY")

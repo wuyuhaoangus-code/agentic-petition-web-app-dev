@@ -88,7 +88,13 @@ class LangChainDrafterAgent:
         repo = ProfileRepository(db)
         return repo.get_by_id(user_id)
 
-    async def draft_petition_intro(self, db: Session, user_id: uuid.UUID, user_name: str = "The Petitioner") -> str:
+    async def draft_petition_intro(
+        self,
+        db: Session,
+        user_id: uuid.UUID,
+        user_name: str = "The Petitioner",
+        run_id: Optional[uuid.UUID] = None,
+    ) -> str:
         global PROMPT_REGISTRY
         if not PROMPT_REGISTRY:
             PROMPT_REGISTRY = load_prompt_registry()
@@ -99,6 +105,7 @@ class LangChainDrafterAgent:
             db=db,
             user_id=user_id,
             user_name=user_name,
+            run_id=run_id,
             llm=self.llm_with_grounding,
             profile=profile,
             prompt_registry=PROMPT_REGISTRY,

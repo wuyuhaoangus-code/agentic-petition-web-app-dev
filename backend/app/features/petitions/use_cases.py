@@ -243,7 +243,6 @@ async def draft_petition_section(
 ):
     try:
         exhibit_repo = ExhibitRepository(db)
-        draft_repo = PetitionDraftRepository(db)
         user_id = uuid.UUID(current_user.id)
 
         exhibit = exhibit_repo.get_by_id(exhibit_id, user_id)
@@ -254,37 +253,11 @@ async def draft_petition_section(
         user_name = current_user.user_metadata.get("name", "The Petitioner")
 
         if exhibit.criteria_id == "personal_info":
-            logger.info(f"Drafting overall Petition Intro (triggered by personal_info exhibit {exhibit_id})")
-            petition_intro = await drafter.draft_petition_intro(db, user_id, user_name)
-
-            existing_draft = draft_repo.get_intro(exhibit.run_id)
-
-            if existing_draft:
-                existing_draft.section_content = petition_intro
-                if not existing_draft.application_id:
-                    existing_draft.application_id = exhibit.application_id
-                logger.info("Updated existing petition intro draft")
-            else:
-                profile = profile_service.get_profile(db, user_id)
-                new_draft = UserPetitionDraft(
-                    run_id=exhibit.run_id,
-                    user_id=user_id,
-                    application_id=exhibit.application_id,
-                    section="intro",
-                    section_content=petition_intro,
-                    rag_field=profile.field if profile else None,
-                    rag_occupation=profile.occupation if profile else None,
-                )
-                draft_repo.upsert_intro(new_draft)
-                logger.info("Created new petition intro draft")
-
-            try:
-                db.commit()
-            except Exception as commit_err:
-                db.rollback()
-                logger.error(f"Failed to persist petition intro draft: {commit_err}")
-                raise HTTPException(status_code=500, detail="Failed to persist petition intro draft")
-            return {"status": "success", "draft": petition_intro}
+            logger.info(
+                "Skipping intro generation during personal_info drafting for run %s; intro is generated at final assembly time.",
+                exhibit.run_id,
+            )
+            return {"status": "success", "draft": ""}
 
         profile = profile_service.get_profile(db, user_id)
         user_field = profile.field if profile and profile.field else "Extraordinary Ability"
@@ -759,7 +732,12 @@ async def download_petition_section(
                     if not petition_draft:
                         try:
                             logger.info(f"Petition intro missing for run {run_id}, generating on the fly...")
-                            petition_intro = await drafter.draft_petition_intro(db, user_id, user_name)
+                            petition_intro = await drafter.draft_petition_intro(
+                                db,
+                                user_id,
+                                user_name,
+                                run_id=run_id,
+                            )
                             if petition_intro:
                                 profile = profile_service.get_profile(db, user_id)
                                 run_exhibit = exhibit_repo.get_last_run_exhibit(user_id, run_id)

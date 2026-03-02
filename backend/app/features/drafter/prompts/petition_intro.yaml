@@ -12,9 +12,12 @@ human_prompt: |
   Context:
   {field_context}
 
+  Run-scoped evidence details for listed criteria:
+  {criteria_evidence_context}
+
   Instructions:
   1) Write an opening paragraph (3-5 sentences) that introduces the petition and summarizes the petitioner's personal background (education, employment history, and core professional identity) based on the provided Context. Prioritize personal-information evidence and avoid jumping directly into criteria-specific achievements in this opening paragraph.
-  2) Then write 2-3 qualification paragraphs: education/credentials, professional accomplishments, and recognition/impact—tied only to the criteria listed above. You must return at least 2 distinct non-empty strings in `qualification_paragraphs`.
+  2) Then write 2-3 qualification paragraphs: education/credentials, professional accomplishments, and recognition/impact—tied only to the criteria listed above. Use the run-scoped evidence details for concrete facts where available. You must return at least 2 distinct non-empty strings in `qualification_paragraphs`.
   3) Use the petitioner's name: {display_name}. Use the field: {user_field}. Use the occupation: {user_occupation}.
   4) Refer only to the criteria in the list above; do not use generic phrases like "national or international acclaim" unless the evidence criteria explicitly support it.
   {format_instructions}

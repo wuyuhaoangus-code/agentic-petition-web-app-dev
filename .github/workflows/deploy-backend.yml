@@ -1,0 +1,50 @@
+name: Deploy Backtend to VPC
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Clean up before upload
+        run: |
+          rm -rf .git
+          rm -rf .github
+          rm -rf Uikelsey
+          ls -la
+
+      - name: Upload Files by SCP
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          source: "." 
+          target: "/www/wwwroot/abtest"
+          overwrite: true
+          rm: false
+
+      - name: Deploy by SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            cd /www/wwwroot/abtest
+            
+            docker-compose down || true
+            docker-compose up --build -d
+            docker image prune -f
+            
+            echo "Deployment complete."
+            docker-compose logs -f --tail 20

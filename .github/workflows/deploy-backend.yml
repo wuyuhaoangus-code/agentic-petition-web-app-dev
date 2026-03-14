@@ -49,4 +49,4 @@ jobs:
             docker image prune -f
             
             echo "Deployment complete."
-            docker-compose logs -f --tail 20
+            docker-compose logs --tail 20

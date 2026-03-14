@@ -18,6 +18,8 @@ jobs:
           rm -rf .git
           rm -rf .github
           rm -rf Uikelsey
+          find . -type d -name "__pycache__" -exec rm -rf {} +
+          find . -type f -name "*.pyc" -delete
           ls -la
 
       - name: Upload Files by SCP
